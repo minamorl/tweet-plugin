@@ -1,10 +1,10 @@
 {
-  "id": "emailer",
-  "name": "Emailer",
-  "version": "1.1",
-  "minAppVersion": "0.15.0",
+  "id": "tweet-plugin",
+  "name": "TweetPlugin",
+  "version": "0.1",
+  "minAppVersion": "0.1",
   "isDesktopOnly": true,
-  "author": "tommll",
-  "description": "Sending your Obsidian notes to people's mail inboxes.",
-  "repo": "https://github.com/tommll/obsidian-email-plugin"
+  "author": "minamorl",
+  "description": "",
+  "repo": "https://github.com/minamorl/tweet-plugin"
 }
