@@ -24,15 +24,10 @@ export default class EmailSenderPlugin extends Plugin {
 
 		this.addCommand({
 			id: "enter-email",
-			name: "Send to email",
+			name: "Post to X",
 			editorCallback: (editor: Editor) => {
-				new EmailModal(this.app, editor, (content, subject) => {
-					const addresses = parseEmails(content);
-					addresses.forEach((address) => {
-						const selection = editor.getSelection();
-						this.emailSender.sendEmail(selection, subject, address)
-					})
-				}).open();
+        const selection = editor.getSelection();
+        this.emailSender.sendEmail(selection, '#IFTTT', 'trigger@applet.ifttt.com');
 			},
 		});
 

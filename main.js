@@ -11181,7 +11181,7 @@ __export(main_exports, {
   default: () => EmailSenderPlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian3 = require("obsidian");
+var import_obsidian2 = require("obsidian");
 
 // services/emailSender.ts
 var import_nodemailer = __toESM(require_nodemailer(), 1);
@@ -11219,59 +11219,21 @@ var EmailSender = class {
   }
 };
 
-// emailModal.ts
-var import_obsidian2 = require("obsidian");
-var EmailModal = class extends import_obsidian2.Modal {
-  constructor(app, editor, onSubmit) {
-    super(app);
-    this.onSubmit = onSubmit;
-    this.editor = editor;
-  }
-  onOpen() {
-    const { contentEl } = this;
-    contentEl.createEl("h1", { text: "Send selected content to?" });
-    new import_obsidian2.Setting(contentEl).setName("Email").addText((text) => text.onChange((value) => {
-      this.content = value;
-    }));
-    new import_obsidian2.Setting(contentEl).setName("Subject").addText((text) => text.onChange((value) => {
-      this.subject = value;
-    }));
-    new import_obsidian2.Setting(contentEl).addButton((btn) => btn.setButtonText("Send").setCta().onClick(() => {
-      this.close();
-      this.onSubmit(this.content, this.subject);
-    }));
-  }
-  onClose() {
-    let { contentEl } = this;
-    contentEl.empty();
-  }
-};
-
-// services/emailParser.ts
-function parseEmails(emails) {
-  return emails.split(",").map((email) => email.trim());
-}
-
 // main.ts
 var DEFAULT_SETTINGS = {
   senderEmail: "test@gmail.com",
   senderEmailPassword: "123"
 };
-var EmailSenderPlugin = class extends import_obsidian3.Plugin {
+var EmailSenderPlugin = class extends import_obsidian2.Plugin {
   async onload() {
     await this.loadSettings();
     this.emailSender = new EmailSender(this.settings.senderEmail, this.settings.senderEmailPassword);
     this.addCommand({
       id: "enter-email",
-      name: "Send to email",
+      name: "Post to X",
       editorCallback: (editor) => {
-        new EmailModal(this.app, editor, (content, subject) => {
-          const addresses = parseEmails(content);
-          addresses.forEach((address) => {
-            const selection = editor.getSelection();
-            this.emailSender.sendEmail(selection, subject, address);
-          });
-        }).open();
+        const selection = editor.getSelection();
+        this.emailSender.sendEmail(selection, "#IFTTT", "trigger@applet.ifttt.com");
       }
     });
     this.addSettingTab(new EmailSettingTab(this.app, this));
@@ -11289,7 +11251,7 @@ var EmailSenderPlugin = class extends import_obsidian3.Plugin {
     await this.saveData(this.settings);
   }
 };
-var EmailSettingTab = class extends import_obsidian3.PluginSettingTab {
+var EmailSettingTab = class extends import_obsidian2.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -11297,11 +11259,11 @@ var EmailSettingTab = class extends import_obsidian3.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    new import_obsidian3.Setting(containerEl).setName("Sender's email").addText((text) => text.setPlaceholder("your_email@gmail.com").setValue(this.plugin.settings.senderEmail).onChange(async (value) => {
+    new import_obsidian2.Setting(containerEl).setName("Sender's email").addText((text) => text.setPlaceholder("your_email@gmail.com").setValue(this.plugin.settings.senderEmail).onChange(async (value) => {
       this.plugin.settings.senderEmail = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName("Sender email's password").setClass("pass").addText((text) => {
+    new import_obsidian2.Setting(containerEl).setName("Sender email's password").setClass("pass").addText((text) => {
       text.inputEl.type = "password";
       return text.setPlaceholder("your password").setValue(this.plugin.settings.senderEmailPassword).onChange(async (value) => {
         this.plugin.settings.senderEmailPassword = value;
